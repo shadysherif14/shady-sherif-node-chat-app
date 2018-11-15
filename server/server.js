@@ -19,13 +19,17 @@ io.on('connection', socket => {
 
     console.log('User connected');
     
-    socket.emit('newMessage', {
-        body: 'I Love Lobna',
-        from: 'Shady',
-        created_at: Date.now()
-    });
+    socket.on('createMessage', (message) => {
 
-    socket.on('createMessage', (data) => console.log(data));
+        console.log(JSON.stringify(message, null, 3));
+        
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text,
+            created_at: new Date().getTime()
+        });
+
+    });
 
     socket.on('disconnect', () => console.log('User disconnected'));
 });
